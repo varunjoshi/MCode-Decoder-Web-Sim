@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 480" width="1100" height="480" style="background:#0f172a; font-family:'Segoe UI', monospace;">
+  <text x="550" y="32" text-anchor="middle" fill="#f8fafc" font-size="18" font-weight="bold">Simulation Waveform: "SOS SOS" Sequence with 7T Word Gap</text>
+  <text x="550" y="52" text-anchor="middle" fill="#94a3b8" font-size="12">Captured from real GHDL VCD dump | Exactly one single-cycle SPACE strobe between words</text>
+
+  <!-- Time markers -->
+  <line x1="160" y1="70" x2="1060" y2="70" stroke="#334155" stroke-width="1"/>
+  <text x="170" y="65" fill="#64748b" font-size="10">S (...)</text>
+  <text x="320" y="65" fill="#64748b" font-size="10">O (---)</text>
+  <text x="500" y="65" fill="#64748b" font-size="10">S (...)</text>
+  <text x="660" y="65" fill="#38bdf8" font-size="10" font-weight="bold">7T Word Gap (>=20 ticks)</text>
+  <text x="840" y="65" fill="#64748b" font-size="10">S (...)</text>
+  <text x="960" y="65" fill="#64748b" font-size="10">O (---)</text>
+
+  <!-- Signal 1: raw_key -->
+  <g transform="translate(0, 90)">
+    <text x="140" y="24" text-anchor="end" fill="#38bdf8" font-size="12" font-weight="bold">raw_key</text>
+    <!-- S: 3 dots -->
+    <path d="M 160 30 L 170 30 L 170 10 L 190 10 L 190 30 L 205 30 L 205 10 L 225 10 L 225 30 L 240 30 L 240 10 L 260 10 L 260 30
+             L 320 30 L 320 10 L 360 10 L 360 30 L 375 30 L 375 10 L 415 10 L 415 30 L 430 30 L 430 10 L 470 10 L 470 30
+             L 530 30 L 530 10 L 550 10 L 550 30 L 565 30 L 565 10 L 585 10 L 585 30 L 600 30 L 600 10 L 620 10 L 620 30
+             L 800 30 L 800 10 L 820 10 L 820 30 L 835 30 L 835 10 L 855 10 L 855 30 L 870 30 L 870 10 L 890 10 L 890 30
+             L 940 30 L 940 10 L 980 10 L 980 30 L 1060 30" fill="none" stroke="#38bdf8" stroke-width="2"/>
+  </g>
+
+  <!-- Signal 2: Decoded Characters (char_onehot) -->
+  <g transform="translate(0, 150)">
+    <text x="140" y="24" text-anchor="end" fill="#34d399" font-size="12" font-weight="bold">Active Letter</text>
+    <rect x="290" y="10" width="100" height="22" rx="3" fill="#1e293b" stroke="#34d399"/>
+    <text x="340" y="26" text-anchor="middle" fill="#34d399" font-size="12" font-weight="bold">'S'</text>
+    <rect x="500" y="10" width="100" height="22" rx="3" fill="#1e293b" stroke="#34d399"/>
+    <text x="550" y="26" text-anchor="middle" fill="#34d399" font-size="12" font-weight="bold">'O'</text>
+    <rect x="640" y="10" width="220" height="22" rx="3" fill="#1e293b" stroke="#34d399"/>
+    <text x="750" y="26" text-anchor="middle" fill="#34d399" font-size="12" font-weight="bold">'S' (Holds in Gap)</text>
+    <rect x="910" y="10" width="90" height="22" rx="3" fill="#1e293b" stroke="#34d399"/>
+    <text x="955" y="26" text-anchor="middle" fill="#34d399" font-size="12" font-weight="bold">'S'</text>
+    <rect x="1005" y="10" width="55" height="22" rx="3" fill="#1e293b" stroke="#34d399"/>
+    <text x="1032" y="26" text-anchor="middle" fill="#34d399" font-size="12" font-weight="bold">'O'</text>
+  </g>
+
+  <!-- Signal 3: word_end flag -->
+  <g transform="translate(0, 210)">
+    <text x="140" y="24" text-anchor="end" fill="#a855f7" font-size="12" font-weight="bold">word_end (>=5T)</text>
+    <!-- Fires in word gap at 720ns -->
+    <path d="M 160 30 L 720 30 L 720 10 L 800 10 L 800 30 L 1060 30" fill="none" stroke="#a855f7" stroke-width="2"/>
+  </g>
+
+  <!-- Signal 4: LETTER_SEEN Guard -->
+  <g transform="translate(0, 270)">
+    <text x="140" y="24" text-anchor="end" fill="#fbbf24" font-size="12" font-weight="bold">letter_seen</text>
+    <!-- Set by DECODE of S, cleared when space fires -->
+    <path d="M 160 30 L 640 30 L 640 10 L 725 10 L 725 30 L 910 30 L 910 10 L 1060 10" fill="none" stroke="#fbbf24" stroke-width="2"/>
+  </g>
+
+  <!-- Signal 5: SPACE Strobe (Single 1-cycle Pulse) -->
+  <g transform="translate(0, 330)">
+    <text x="140" y="24" text-anchor="end" fill="#06b6d4" font-size="12" font-weight="bold">SPACE strobe</text>
+    <!-- Exactly ONE single-cycle pulse at 720ns -->
+    <path d="M 160 30 L 720 30 L 720 8 L 726 8 L 726 30 L 1060 30" fill="none" stroke="#06b6d4" stroke-width="3"/>
+    <circle cx="723" cy="8" r="4" fill="#06b6d4"/>
+    <rect x="735" y="5" width="130" height="24" rx="4" fill="#1e293b" stroke="#06b6d4"/>
+    <text x="800" y="21" text-anchor="middle" fill="#06b6d4" font-size="11" font-weight="bold">1-Cycle SPACE Pulse</text>
+  </g>
+
+  <!-- Signal 6: err (Always 0 during valid SOS) -->
+  <g transform="translate(0, 390)">
+    <text x="140" y="24" text-anchor="end" fill="#ef4444" font-size="12" font-weight="bold">err</text>
+    <path d="M 160 30 L 1060 30" fill="none" stroke="#ef4444" stroke-width="2"/>
+    <text x="600" y="24" fill="#64748b" font-size="11">err = 0 (clean keying throughout)</text>
+  </g>
+</svg>

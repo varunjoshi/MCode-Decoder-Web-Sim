@@ -1,0 +1,46 @@
+# VHDL-93 Compilation Order for Digital Morse Decoder
+# MDIT221 Syllabus Units IV and V
+
+# 1. Behavioral Leaf Models (Unit IV)
+src/dff.vhd
+src/jkff.vhd
+src/tff.vhd
+src/srlatch.vhd
+src/ic7490.vhd
+
+# 2. Dataflow Leaf Models & Gates (Unit V)
+src/ic7404.vhd
+src/ic7408.vhd
+src/ic7432.vhd
+src/ic7483.vhd
+src/ic7485.vhd
+src/ic74138.vhd
+src/ic74151.vhd
+src/ic74153.vhd
+
+# 3. Subsystems & Structural Components (Unit V)
+src/synchroniser.vhd
+src/edge_detector.vhd
+src/width_counter.vhd
+src/comparator_dash.vhd
+src/symbol_reg.vhd
+src/length_counter.vhd
+src/gap_counter.vhd
+src/fsm_comb.vhd
+src/morse_fsm.vhd
+src/word_space.vhd
+src/output_reg.vhd
+src/morse_decoder_74138.vhd
+
+# 4. Top-Level Systems (Unit V)
+src/morse_top.vhd
+src/morse_demo_wrapper.vhd
+
+# 5. Unit Testbenches
+tb/tb_dff.vhd
+tb/tb_jkff.vhd
+tb/tb_tff.vhd
+tb/tb_ic74138.vhd
+tb/tb_ic7485.vhd
+tb/tb_ic7490.vhd
+tb/tb_morse.vhd

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pure-Logic Morse Decoder & Circuit Simulation | MDIT221 74xx & Flip-Flop Hardware Architecture</title>
+  <meta name="description" content="State-of-the-art interactive pure-logic hardware simulator for MDIT221 Morse Code Decoder with 7490, 7485, 7483, 74151, 74153, 74138, JK-FF, T-FF, D-FF, realistic breadboard wiring, live signal glow, logic probe HUD, 27-LED matrix, and 8-channel logic analyzer." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body class="theme-light">
+  
+  <!-- Master Application Header -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="logo-badge">
+        <svg class="chip-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="4" y="4" width="16" height="16" rx="2" />
+          <rect x="9" y="9" width="6" height="6" />
+          <line x1="9" y1="1" x2="9" y2="4" /><line x1="15" y1="1" x2="15" y2="4" />
+          <line x1="9" y1="20" x2="9" y2="23" /><line x1="15" y1="20" x2="15" y2="23" />
+          <line x1="1" y1="9" x2="4" y2="9" /><line x1="1" y1="15" x2="4" y2="15" />
+          <line x1="20" y1="9" x2="23" y2="9" /><line x1="20" y1="15" x2="23" y2="15" />
+        </svg>
+        <span class="brand-title">CIRCUIT<span class="brand-highlight">LOGIC</span> MORSE DECODER</span>
+      </div>
+
+      <!-- Architecture Spec Badge -->
+      <div class="mode-switcher-nav" aria-label="Architecture Specification">
+        <div class="mode-tab active" title="MDIT221 Pure-Logic Hardware Workbench">
+          <span class="mode-icon">🔬</span>
+          <span class="mode-text">MDIT221 Syllabus Hardware</span>
+          <span class="mode-badge primary">ACTIVE SPEC</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="system-status-pill">
+        <span class="status-indicator-dot online"></span>
+        <span class="status-text">+5.0V DC REGULATED</span>
+        <span class="divider">•</span>
+        <span class="lcd-badge">MDIT221 • 7490 / 7485 / 7483 / 74151 / 74153 / 74138 / JK-FF / D-FF / T-FF</span>
+      </div>
+
+      <!-- Dedicated Presentation Mode Toggle -->
+      <button id="btn-presentation-mode" class="header-btn presentation-btn" title="Toggle Single-Screen Presentation Mode (Shortcut: P)">
+        <span class="pres-icon">📺</span>
+        <span id="pres-btn-label">Presentation Mode</span>
+        <span class="shortcut-pill">P</span>
+      </button>
+
+      <!-- Theme Switcher Option (Light / Dark) -->
+      <button id="btn-theme-toggle" class="header-btn theme-toggle-btn" title="Toggle Light / Dark Mode">
+        <span id="theme-icon" class="theme-icon">☀️</span>
+        <span id="theme-btn-label">Light Mode</span>
+      </button>
+    </div>
+
+    <div class="header-right">
+      <!-- Pure Logic Audio Controls -->
+      <div class="audio-controls-group">
+        <button id="btn-pure-audio-mute" class="header-btn" title="Toggle CW Sidetone & Hardware Audio">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <span>CW Tone (700Hz)</span>
+        </button>
+        <div class="volume-slider-wrapper" title="Adjust Master Sound Volume">
+          <input type="range" id="pure-audio-volume" min="0" max="1" step="0.05" value="0.6" class="mini-slider" aria-label="Pure Logic Volume">
+        </div>
+      </div>
+
+      <!-- Master Circuit Reset -->
+      <button id="btn-sim-reset" class="btn-reset" title="Perform Power-On Master Reset on Shift Register & Counter">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="1 4 1 10 7 10"></polyline>
+          <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+        </svg>
+        RESET
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       SINGLE-SCREEN PRESENTATION DASHBOARD (NO SCROLLING NEEDED)
+       ========================================================================== -->
+  <main id="pure-logic-workspace" class="pure-logic-layout single-screen-dashboard">
+    
+    <!-- LEFT COLUMN: Main Visual Stage & Physical Straight Key -->
+    <section class="stage-column">
+      
+      <!-- Top Station Toolbar -->
+      <div class="workbench-toolbar">
+        <div class="toolbar-left">
+          <!-- View Switch Tabs -->
+          <div class="view-switch-tabs">
+            <button id="btn-view-breadboard" class="view-tab-btn active" title="Breadboard & IC Wiring View">
+              <span class="tab-icon">🔌</span>
+              <span>Breadboard</span>
+            </button>
+            <button id="btn-view-schematic" class="view-tab-btn" title="Schematic Logic Flow">
+              <span class="tab-icon">📐</span>
+              <span>Schematic Flow</span>
+            </button>
+            <button id="btn-view-analyzer" class="view-tab-btn" title="8-Channel Logic Analyzer">
+              <span class="tab-icon">📈</span>
+              <span>8-Ch Analyzer</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="toolbar-center">
+          <!-- Simulation Speed & Step Controls -->
+          <div class="sim-controls-deck">
+            <button id="btn-sim-play" class="sim-ctrl-btn active" title="Run Simulation">▶</button>
+            <button id="btn-sim-pause" class="sim-ctrl-btn" title="Pause Simulation">⏸</button>
+            <button id="btn-sim-speed-1x" class="sim-ctrl-btn active" title="1.0x Real-Time">1.0x</button>
+            <button id="btn-sim-speed-05x" class="sim-ctrl-btn" title="0.5x Half-Speed">0.5x</button>
+            <button id="btn-sim-speed-02x" class="sim-ctrl-btn" title="0.2x Slow-Motion">0.2x</button>
+            <button id="btn-sim-step" class="sim-ctrl-btn" title="Single Step (+10ms)">⏭ Step</button>
+          </div>
+        </div>
+
+        <div class="toolbar-right">
+          <!-- Trimmer RV1 (Dash Discriminator 7485) -->
+          <div class="trimmer-control compact" title="RV1: 7485 Magnitude Comparator Dash Threshold (150-400ms)">
+            <div class="trimmer-label-row">
+              <span class="trimmer-tag">7485 DASH THRESH:</span>
+              <span id="val-rv1" class="trimmer-val">250 ms</span>
+            </div>
+            <input type="range" id="slider-rv1" min="150" max="400" value="250" class="mini-slider" aria-label="7485 Dash Threshold">
+          </div>
+
+          <!-- Trimmer RV2 (Gap Timeout 7485) -->
+          <div class="trimmer-control compact" title="RV2: 7485 Letter Gap Timeout (0.5-2.5s)">
+            <div class="trimmer-label-row">
+              <span class="trimmer-tag">7485 GAP TIMEOUT:</span>
+              <span id="val-rv2" class="trimmer-val">1.00 s</span>
+            </div>
+            <input type="range" id="slider-rv2" min="500" max="2500" value="1000" class="mini-slider" aria-label="7485 Gap Timeout">
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Visual Canvas Stage -->
+      <div class="canvas-stage-container">
+        <div class="canvas-wrapper">
+          <canvas id="pure-logic-canvas" width="1400" height="780"></canvas>
+        </div>
+        <div class="canvas-tip-overlay">
+          <span>💡 Click / Hold Straight Key or press <kbd>Spacebar</kbd> • Hover any chip pin to inspect live 5V voltage</span>
+        </div>
+      </div>
+
+      <!-- Compact Bottom Horizontal Telegraph Console -->
+      <div class="deck-card telegraph-deck-card compact-console">
+        <div class="telegraph-assembly">
+          <!-- Realistic Brass Key Apparatus -->
+          <div class="brass-key-stage" title="Click and hold to key Morse code (or press Spacebar)">
+            <div id="telegraph-key-lever" class="brass-lever-lever">
+              <div class="brass-knob"></div>
+              <div class="brass-arm"></div>
+              <div class="brass-pivot-fulcrum"></div>
+              <div class="brass-contact-tip"></div>
+            </div>
+            <div class="brass-anvil-base">
+              <div id="key-contact-spark" class="spark-fx"></div>
+            </div>
+          </div>
+
+          <!-- Key Press Timing Telemetry -->
+          <div class="key-timing-readout">
+            <div class="readout-metrics-row">
+              <div class="timer-stat-box">
+                <span class="stat-label">HOLD TIME:</span>
+                <span id="key-press-timer" class="stat-value">0 ms</span>
+              </div>
+              <div class="type-stat-box">
+                <span class="stat-label">DISCRIMINATOR:</span>
+                <span id="key-type-indicator" class="key-type idle">KEY IDLE</span>
+              </div>
+              <div class="key-quick-hints">
+                <span class="badge-hint"><kbd>Space</kbd> Ready</span>
+                <span class="badge-hint">&lt;250ms = Dot (0)</span>
+                <span class="badge-hint">&ge;250ms = Dash (1)</span>
+              </div>
+            </div>
+
+            <!-- Visual Threshold Progress Meter -->
+            <div class="threshold-meter-bar" title="Threshold: 250ms (RV1). Green = Dot (<250ms), Magenta = Dash (≥250ms)">
+              <div id="key-progress-fill" class="threshold-fill"></div>
+              <div class="threshold-marker-line" style="left: 60%;" title="250ms Threshold Marker">
+                <span class="marker-text">250ms</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- RIGHT COLUMN: Annunciator & Presentation Tools Dock -->
+    <aside class="dock-column">
+      
+      <!-- TOP: 27-LED Output Annunciator Matrix -->
+      <div class="deck-card annunciator-deck-card">
+        <div class="deck-header">
+          <div class="deck-title">
+            <span class="led-dot cyan-glow"></span>
+            27-LED OUTPUT ANNUNCIATOR MATRIX
+          </div>
+          <span class="deck-badge">74HC LATCHED</span>
+        </div>
+
+        <!-- Latched Letter Giant Banner -->
+        <div class="latched-letter-banner">
+          <div class="letter-badge-large">
+            <span id="banner-latched-letter" class="hero-letter">--</span>
+          </div>
+          <div class="banner-meta">
+            <div class="meta-row">
+              <span class="meta-tag">MORSE:</span>
+              <span id="banner-latched-morse" class="meta-val">Awaiting Key...</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-tag">REGISTER:</span>
+              <span id="banner-latched-binary" class="meta-val">Bits: ----</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-tag">DECODER:</span>
+              <span id="banner-latched-chip" class="meta-val">---</span>
+              <span class="meta-divider">•</span>
+              <span id="banner-latched-count" class="meta-val">Count: 0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 27 Physical LED Domes Array -->
+        <div class="led-matrix-grid">
+          <div class="led-socket" id="led-A" title="Letter A (· –)"><div class="led-dome"></div><span class="led-lbl">A</span></div>
+          <div class="led-socket" id="led-B" title="Letter B (– · · ·)"><div class="led-dome"></div><span class="led-lbl">B</span></div>
+          <div class="led-socket" id="led-C" title="Letter C (– · – ·)"><div class="led-dome"></div><span class="led-lbl">C</span></div>
+          <div class="led-socket" id="led-D" title="Letter D (– · ·)"><div class="led-dome"></div><span class="led-lbl">D</span></div>
+          <div class="led-socket" id="led-E" title="Letter E (·)"><div class="led-dome"></div><span class="led-lbl">E</span></div>
+          <div class="led-socket" id="led-F" title="Letter F (· · – ·)"><div class="led-dome"></div><span class="led-lbl">F</span></div>
+          <div class="led-socket" id="led-G" title="Letter G (– – ·)"><div class="led-dome"></div><span class="led-lbl">G</span></div>
+          <div class="led-socket" id="led-H" title="Letter H (· · · ·)"><div class="led-dome"></div><span class="led-lbl">H</span></div>
+          <div class="led-socket" id="led-I" title="Letter I (· ·)"><div class="led-dome"></div><span class="led-lbl">I</span></div>
+          <div class="led-socket" id="led-J" title="Letter J (· – – –)"><div class="led-dome"></div><span class="led-lbl">J</span></div>
+          <div class="led-socket" id="led-K" title="Letter K (– · –)"><div class="led-dome"></div><span class="led-lbl">K</span></div>
+          <div class="led-socket" id="led-L" title="Letter L (· – · ·)"><div class="led-dome"></div><span class="led-lbl">L</span></div>
+          <div class="led-socket" id="led-M" title="Letter M (– –)"><div class="led-dome"></div><span class="led-lbl">M</span></div>
+          <div class="led-socket" id="led-N" title="Letter N (– ·)"><div class="led-dome"></div><span class="led-lbl">N</span></div>
+          <div class="led-socket" id="led-O" title="Letter O (– – –)"><div class="led-dome"></div><span class="led-lbl">O</span></div>
+          <div class="led-socket" id="led-P" title="Letter P (· – – ·)"><div class="led-dome"></div><span class="led-lbl">P</span></div>
+          <div class="led-socket" id="led-Q" title="Letter Q (– – · –)"><div class="led-dome"></div><span class="led-lbl">Q</span></div>
+          <div class="led-socket" id="led-R" title="Letter R (· – ·)"><div class="led-dome"></div><span class="led-lbl">R</span></div>
+          <div class="led-socket" id="led-S" title="Letter S (· · ·)"><div class="led-dome"></div><span class="led-lbl">S</span></div>
+          <div class="led-socket" id="led-T" title="Letter T (–)"><div class="led-dome"></div><span class="led-lbl">T</span></div>
+          <div class="led-socket" id="led-U" title="Letter U (· · –)"><div class="led-dome"></div><span class="led-lbl">U</span></div>
+          <div class="led-socket" id="led-V" title="Letter V (· · · –)"><div class="led-dome"></div><span class="led-lbl">V</span></div>
+          <div class="led-socket" id="led-W" title="Letter W (· – –)"><div class="led-dome"></div><span class="led-lbl">W</span></div>
+          <div class="led-socket" id="led-X" title="Letter X (– · · –)"><div class="led-dome"></div><span class="led-lbl">X</span></div>
+          <div class="led-socket" id="led-Y" title="Letter Y (– · – –)"><div class="led-dome"></div><span class="led-lbl">Y</span></div>
+          <div class="led-socket" id="led-Z" title="Letter Z (– – · ·)"><div class="led-dome"></div><span class="led-lbl">Z</span></div>
+          <!-- Error LED -->
+          <div class="led-socket led-err-socket" id="led-ERR" title="ERR: 5+ symbols or invalid code (U11/U12)"><div class="led-dome red-dome"></div><span class="led-lbl err-lbl">ERR</span></div>
+        </div>
+
+        <!-- Decoded Message Tape -->
+        <div class="tape-container">
+          <div class="tape-header">
+            <span class="tape-label">DECODED MESSAGE TAPE:</span>
+            <div class="tape-actions">
+              <button id="btn-copy-tape" class="chip-button mini" title="Copy Message Tape">Copy</button>
+              <button id="btn-clear-tape" class="chip-button mini danger" title="Clear Tape">Clear</button>
+            </div>
+          </div>
+          <div id="decoded-tape-text" class="tape-strip" placeholder="Decoded characters will print here..."></div>
+        </div>
+      </div>
+
+      <!-- BOTTOM: Tabbed Presentation Tools Deck -->
+      <div class="deck-card presentation-tools-card">
+        <div class="tools-tab-bar">
+          <button class="tool-deck-tab active" data-tab="pane-spec-tests">🧪 Spec Tests (1-5)</button>
+          <button class="tool-deck-tab" data-tab="pane-quick-keyer">⌨ Quick A-Z</button>
+          <button class="tool-deck-tab" data-tab="pane-bus-telemetry">⚡ 5V Probes</button>
+        </div>
+
+        <div class="tool-panes-wrapper">
+          <!-- Pane 1: Spec Tests -->
+          <div id="pane-spec-tests" class="tool-pane active">
+            <div class="test-buttons-list compact-list">
+              <!-- Test 1 -->
+              <div class="test-item compact">
+                <div class="test-info">
+                  <span class="test-num">TEST 1 • 7490 & 7485 DISCRIMINATOR</span>
+                  <span class="test-name">Dot vs Dash Discrimination</span>
+                  <span class="test-desc">180ms dot (&lt;250ms) + 320ms dash (&gt;250ms) -&gt; 'A' (· –)</span>
+                </div>
+                <button id="btn-spec-test-1" class="test-run-btn">Run Test 1</button>
+              </div>
+
+              <!-- Test 2 -->
+              <div class="test-item compact">
+                <div class="test-info">
+                  <span class="test-num">TEST 2 • 74138 DECODER MATRIX</span>
+                  <span class="test-name">Sequence E, T, A, B, S, O, H, Z, Q</span>
+                  <span class="test-desc">Exercises 6x 74138 decoder stages (Lengths 1 to 4)</span>
+                </div>
+                <button id="btn-spec-test-2" class="test-run-btn">Run Test 2</button>
+              </div>
+
+              <!-- Test 3 -->
+              <div class="test-item compact">
+                <div class="test-info">
+                  <span class="test-num">TEST 3 • 7490 &amp; JK-FF TIMING</span>
+                  <span class="test-name">Fast Dot-Dot (100ms Gap)</span>
+                  <span class="test-desc">Verifies 7490 width counter clear &amp; JK-FF shift -&gt; 'I' (··)</span>
+                </div>
+                <button id="btn-spec-test-3" class="test-run-btn">Run Test 3</button>
+              </div>
+
+              <!-- Test 4 -->
+              <div class="test-item compact">
+                <div class="test-info">
+                  <span class="test-num">TEST 4 • 7490 &amp; 7485 GAP DETECTOR</span>
+                  <span class="test-name">Letter Gap Threshold (0.9s vs 1.1s)</span>
+                  <span class="test-desc">7485 gap comparator asserts LETTER_END at timeout</span>
+                </div>
+                <button id="btn-spec-test-4" class="test-run-btn">Run Test 4</button>
+              </div>
+
+              <!-- Test 5 -->
+              <div class="test-item compact">
+                <div class="test-info">
+                  <span class="test-num">TEST 5 • T-FF COUNTER OVERFLOW</span>
+                  <span class="test-name">5+ Symbols Overflow</span>
+                  <span class="test-desc">3-bit T-FF length counter &gt; 5 asserts ERR LED via 7408/7432</span>
+                </div>
+                <button id="btn-spec-test-5" class="test-run-btn danger">Run Test 5</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pane 2: Quick Character Auto-Keyer -->
+          <div id="pane-quick-keyer" class="tool-pane">
+            <div class="quick-alphabet-section">
+              <span class="section-sub-title">Click any letter to auto-transmit Morse code:</span>
+              <div id="quick-alphabet-deck" class="quick-letters-grid"></div>
+            </div>
+          </div>
+
+          <!-- Pane 3: Real-Time Signal Bus Telemetry -->
+          <div id="pane-bus-telemetry" class="tool-pane">
+            <div class="bus-pills-flow compact-flow">
+              <div class="bus-pill"><span class="pill-k">Node X (Debounced):</span><span id="bus-node-x" class="pill-v">0.00V</span></div>
+              <div class="bus-pill"><span class="pill-k">/KEY (Sync DFF):</span><span id="bus-not-key" class="pill-v">1</span></div>
+              <div class="bus-pill"><span class="pill-k">KEY (Sync DFF):</span><span id="bus-key" class="pill-v">0</span></div>
+              <div class="bus-pill"><span class="pill-k">Width Ctr (7490):</span><span id="bus-u2-pin3" class="pill-v">0</span></div>
+              <div class="bus-pill highlight-magenta"><span class="pill-k">Dash Flag (7485):</span><span id="bus-data" class="pill-v">0 [DOT]</span></div>
+              <div class="bus-pill highlight-cyan"><span class="pill-k">Symbol Reg (JK-FF):</span><span id="bus-shift-reg" class="pill-v">0000</span></div>
+              <div class="bus-pill highlight-green"><span class="pill-k">Length Ctr (T-FF):</span><span id="bus-counter" class="pill-v">0</span></div>
+              <div class="bus-pill"><span class="pill-k">Gap Ctr (7490):</span><span id="bus-pause-cap" class="pill-v">0</span></div>
+              <div class="bus-pill highlight-purple"><span class="pill-k">Letter End (7485):</span><span id="bus-end" class="pill-v">0</span></div>
+              <div class="bus-pill highlight-gold"><span class="pill-k">Output Reg (DFF):</span><span id="bus-latch" class="pill-v">NONE</span></div>
+              <div class="bus-pill highlight-red"><span class="pill-k">Sync Clear:</span><span id="bus-clear" class="pill-v">OK</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- Application Bootstrap -->
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

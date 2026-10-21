@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1150 650" width="1150" height="650" style="background:#0b1120; font-family:'Segoe UI', system-ui, sans-serif;">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arr-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399"/>
+    </marker>
+    <marker id="arr-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24"/>
+    </marker>
+  </defs>
+
+  <text x="575" y="38" text-anchor="middle" fill="#f8fafc" font-size="22" font-weight="bold">Digital Morse Decoder: Top-Level Hardware Structural Architecture</text>
+  <text x="575" y="60" text-anchor="middle" fill="#94a3b8" font-size="13">Strict MDIT221 Syllabus ICs: 74138 Decoders, 7485 Comparators, 7490 Divider, Flip-Flops (D, JK, T, SR-Latch)</text>
+
+  <!-- 1. Synchroniser & Edge Detector -->
+  <g transform="translate(40, 90)">
+    <rect width="180" height="150" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+    <text x="90" y="28" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="bold">1 &amp; 2. Key Front-End</text>
+    <text x="90" y="46" text-anchor="middle" fill="#94a3b8" font-size="11">SR Debounce + 2× DFF</text>
+    <rect x="20" y="58" width="140" height="32" rx="4" fill="#0f172a" stroke="#334155"/>
+    <text x="90" y="79" text-anchor="middle" fill="#e2e8f0" font-size="11">synchroniser.vhd</text>
+    <rect x="20" y="98" width="140" height="36" rx="4" fill="#0f172a" stroke="#334155"/>
+    <text x="90" y="115" text-anchor="middle" fill="#e2e8f0" font-size="11">edge_detector.vhd</text>
+    <text x="90" y="128" text-anchor="middle" fill="#34d399" font-size="10">PRESS / RELEASE</text>
+  </g>
+
+  <!-- Input raw_key -->
+  <path d="M 10 165 L 40 165" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arr)"/>
+  <text x="18" y="152" fill="#38bdf8" font-size="11">raw_key</text>
+
+  <!-- 3 & 4. Width Counter & Dash Comparator -->
+  <g transform="translate(260, 90)">
+    <rect width="210" height="150" rx="8" fill="#1e293b" stroke="#34d399" stroke-width="2"/>
+    <text x="105" y="28" text-anchor="middle" fill="#34d399" font-size="13" font-weight="bold">3 &amp; 4. Dash Discriminator</text>
+    <text x="105" y="46" text-anchor="middle" fill="#94a3b8" font-size="11">4-bit T-FF Counter + 7485</text>
+    <rect x="15" y="58" width="180" height="32" rx="4" fill="#0f172a" stroke="#334155"/>
+    <text x="105" y="79" text-anchor="middle" fill="#e2e8f0" font-size="11">width_counter (4× TFF)</text>
+    <rect x="15" y="98" width="180" height="36" rx="4" fill="#0f172a" stroke="#334155"/>
+    <text x="105" y="115" text-anchor="middle" fill="#e2e8f0" font-size="11">comparator_dash (ic7485)</text>
+    <text x="105" y="128" text-anchor="middle" fill="#f59e0b" font-size="10">Sticky DASH Flag (DFF)</text>
+  </g>
+
+  <path d="M 220 145 L 260 145" stroke="#34d399" stroke-width="2" marker-end="url(#arr-green)"/>
+  <text x="238" y="137" fill="#34d399" font-size="10">PRESS</text>
+
+  <!-- 5. 5-Cell Symbol Register (SIPO from JK Flip-Flops) -->
+  <g transform="translate(510, 90)">
+    <rect width="360" height="150" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+    <text x="180" y="28" text-anchor="middle" fill="#f59e0b" font-size="13" font-weight="bold">5. 5-Cell SIPO Symbol Register (symbol_reg.vhd)</text>
+    <text x="180" y="46" text-anchor="middle" fill="#94a3b8" font-size="11">Built from 5× JK Flip-Flops (J = D·sh_en, K = D'·sh_en + clear)</text>
+    
+    <!-- 5 JK Cells -->
+    <g transform="translate(15, 60)">
+      <!-- Cell 0 -->
+      <rect x="0" y="0" width="60" height="70" rx="4" fill="#0f172a" stroke="#fbbf24"/>
+      <text x="30" y="24" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="bold">JK #0</text>
+      <text x="30" y="44" text-anchor="middle" fill="#f8fafc" font-size="12">Q₀</text>
+      <text x="30" y="60" text-anchor="middle" fill="#94a3b8" font-size="9">s₀ (1st)</text>
+
+      <!-- Cell 1 -->
+      <rect x="68" y="0" width="60" height="70" rx="4" fill="#0f172a" stroke="#fbbf24"/>
+      <text x="98" y="24" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="bold">JK #1</text>
+      <text x="98" y="44" text-anchor="middle" fill="#f8fafc" font-size="12">Q₁</text>
+      <text x="98" y="60" text-anchor="middle" fill="#94a3b8" font-size="9">s₁</text>
+
+      <!-- Cell 2 -->
+      <rect x="136" y="0" width="60" height="70" rx="4" fill="#0f172a" stroke="#fbbf24"/>
+      <text x="166" y="24" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="bold">JK #2</text>
+      <text x="166" y="44" text-anchor="middle" fill="#f8fafc" font-size="12">Q₂</text>
+      <text x="166" y="60" text-anchor="middle" fill="#94a3b8" font-size="9">s₂</text>
+
+      <!-- Cell 3 -->
+      <rect x="204" y="0" width="60" height="70" rx="4" fill="#0f172a" stroke="#fbbf24"/>
+      <text x="234" y="24" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="bold">JK #3</text>
+      <text x="234" y="44" text-anchor="middle" fill="#f8fafc" font-size="12">Q₃</text>
+      <text x="234" y="60" text-anchor="middle" fill="#94a3b8" font-size="9">s₃</text>
+
+      <!-- Cell 4 -->
+      <rect x="272" y="0" width="60" height="70" rx="4" fill="#0f172a" stroke="#fbbf24"/>
+      <text x="302" y="24" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="bold">JK #4</text>
+      <text x="302" y="44" text-anchor="middle" fill="#f8fafc" font-size="12">Q₄</text>
+      <text x="302" y="60" text-anchor="middle" fill="#94a3b8" font-size="9">s₄ (5th)</text>
+    </g>
+  </g>
+
+  <path d="M 470 165 L 510 165" stroke="#f59e0b" stroke-width="2" marker-end="url(#arr-amber)"/>
+  <text x="480" y="157" fill="#f59e0b" font-size="10">DASH</text>
+
+  <!-- 6. Gap Counter -->
+  <g transform="translate(40, 275)">
+    <rect width="210" height="135" rx="8" fill="#1e293b" stroke="#a855f7" stroke-width="2"/>
+    <text x="105" y="26" text-anchor="middle" fill="#a855f7" font-size="13" font-weight="bold">6. Gap Counter (gap_counter.vhd)</text>
+    <text x="105" y="44" text-anchor="middle" fill="#94a3b8" font-size="10">5-bit T-FF + Cascaded 7485s</text>
+    <rect x="15" y="55" width="180" height="30" rx="4" fill="#0f172a" stroke="#334155"/>
+    <text x="105" y="74" text-anchor="middle" fill="#e2e8f0" font-size="10">Threshold 2T (8): LETTER_END</text>
+    <rect x="15" y="92" width="180" height="30" rx="4" fill="#0f172a" stroke="#334155"/>
+    <text x="105" y="111" text-anchor="middle" fill="#e2e8f0" font-size="10">Threshold 5T (20): WORD_END</text>
+  </g>
+
+  <!-- 7. Control FSM -->
+  <g transform="translate(290, 275)">
+    <rect width="180" height="135" rx="8" fill="#1e293b" stroke="#ec4899" stroke-width="2"/>
+    <text x="90" y="26" text-anchor="middle" fill="#ec4899" font-size="13" font-weight="bold">7. Control FSM (morse_fsm)</text>
+    <text x="90" y="44" text-anchor="middle" fill="#94a3b8" font-size="10">4 States, 2 DFFs (Gray Coded)</text>
+    <text x="90" y="68" text-anchor="middle" fill="#e2e8f0" font-size="11">IDLE (00) → MEAS (01)</text>
+    <text x="90" y="86" text-anchor="middle" fill="#e2e8f0" font-size="11">GAP (11) → DECODE (10)</text>
+    <text x="90" y="108" text-anchor="middle" fill="#f472b6" font-size="10">decode_strobe / clear_regs</text>
+  </g>
+
+  <!-- 8. Word Space -->
+  <g transform="translate(40, 440)">
+    <rect width="210" height="90" rx="8" fill="#1e293b" stroke="#06b6d4" stroke-width="2"/>
+    <text x="105" y="26" text-anchor="middle" fill="#06b6d4" font-size="13" font-weight="bold">8. Word Space (word_space.vhd)</text>
+    <text x="105" y="45" text-anchor="middle" fill="#94a3b8" font-size="10">LETTER_SEEN DFF Guard</text>
+    <text x="105" y="68" text-anchor="middle" fill="#38bdf8" font-size="11">Single-pulse SPACE Strobe</text>
+  </g>
+
+  <path d="M 250 485 L 1100 485" stroke="#06b6d4" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="1050" y="475" fill="#06b6d4" font-size="12" font-weight="bold">SPACE</text>
+
+  <!-- 5b. Length Counter -->
+  <g transform="translate(510, 275)">
+    <rect width="160" height="135" rx="8" fill="#1e293b" stroke="#eab308" stroke-width="2"/>
+    <text x="80" y="26" text-anchor="middle" fill="#eab308" font-size="12" font-weight="bold">Length Counter</text>
+    <text x="80" y="44" text-anchor="middle" fill="#94a3b8" font-size="10">3-bit TFF Counter</text>
+    <rect x="15" y="55" width="130" height="30" rx="4" fill="#0f172a" stroke="#334155"/>
+    <text x="80" y="74" text-anchor="middle" fill="#e2e8f0" font-size="10">Count len[2:0]</text>
+    <rect x="15" y="92" width="130" height="30" rx="4" fill="#0f172a" stroke="#334155"/>
+    <text x="80" y="111" text-anchor="middle" fill="#ef4444" font-size="10">OVERFLOW (>=6)</text>
+  </g>
+
+  <!-- 10. Output Register -->
+  <g transform="translate(710, 275)">
+    <rect width="160" height="135" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+    <text x="80" y="26" text-anchor="middle" fill="#10b981" font-size="12" font-weight="bold">10. Output Latch Reg</text>
+    <text x="80" y="44" text-anchor="middle" fill="#94a3b8" font-size="10">DFF Bank (output_reg.vhd)</text>
+    <text x="80" y="74" text-anchor="middle" fill="#e2e8f0" font-size="10">Latches {len, bits, ovf}</text>
+    <text x="80" y="95" text-anchor="middle" fill="#34d399" font-size="10">on decode_strobe</text>
+    <text x="80" y="115" text-anchor="middle" fill="#94a3b8" font-size="9">Holds display across gaps</text>
+  </g>
+
+  <!-- 9. 74138 Decoder Network -->
+  <g transform="translate(910, 90)">
+    <rect width="210" height="320" rx="8" fill="#1e293b" stroke="#6366f1" stroke-width="2"/>
+    <text x="105" y="28" text-anchor="middle" fill="#6366f1" font-size="13" font-weight="bold">9. 74138 Decoder Network</text>
+    <text x="105" y="46" text-anchor="middle" fill="#94a3b8" font-size="11">Total: 6× 74138 ICs (Minimized)</text>
+    
+    <rect x="15" y="58" width="180" height="34" rx="4" fill="#0f172a" stroke="#334155"/>
+    <text x="105" y="74" text-anchor="middle" fill="#e2e8f0" font-size="10">1× 74138: Length (/L1../L5)</text>
+    <text x="105" y="86" text-anchor="middle" fill="#94a3b8" font-size="9">len[2:0] to CBA</text>
+
+    <rect x="15" y="100" width="180" height="34" rx="4" fill="#0f172a" stroke="#334155"/>
+    <text x="105" y="116" text-anchor="middle" fill="#e2e8f0" font-size="10">1× 74138: n=1 Letters (E, T)</text>
+    <text x="105" y="128" text-anchor="middle" fill="#94a3b8" font-size="9">BC grounded, enabled /L1</text>
+
+    <rect x="15" y="142" width="180" height="34" rx="4" fill="#0f172a" stroke="#334155"/>
+    <text x="105" y="158" text-anchor="middle" fill="#e2e8f0" font-size="10">1× 74138: n=2 Letters (I,A,N,M)</text>
+    <text x="105" y="170" text-anchor="middle" fill="#94a3b8" font-size="9">C grounded, enabled /L2</text>
+
+    <rect x="15" y="184" width="180" height="34" rx="4" fill="#0f172a" stroke="#334155"/>
+    <text x="105" y="200" text-anchor="middle" fill="#e2e8f0" font-size="10">1× 74138: n=3 Letters (S,U..)</text>
+    <text x="105" y="212" text-anchor="middle" fill="#94a3b8" font-size="9">Full 8 outputs, enabled /L3</text>
+
+    <rect x="15" y="226" width="180" height="50" rx="4" fill="#0f172a" stroke="#334155"/>
+    <text x="105" y="242" text-anchor="middle" fill="#e2e8f0" font-size="10">2× 74138: 4-to-16 on Q(3..0)</text>
+    <text x="105" y="256" text-anchor="middle" fill="#38bdf8" font-size="9">n=4 Letters (/L4 enabled)</text>
+    <text x="105" y="268" text-anchor="middle" fill="#34d399" font-size="9">n=5 Digits 0-9 (Q4 qualified)</text>
+
+    <rect x="15" y="284" width="180" height="24" rx="4" fill="#0f172a" stroke="#ef4444"/>
+    <text x="105" y="300" text-anchor="middle" fill="#ef4444" font-size="10" font-weight="bold">ERR Logic (Unused/Ovf)</text>
+  </g>
+
+  <!-- Output Busses -->
+  <path d="M 1000 410 L 1000 440 L 1100 440" stroke="#6366f1" stroke-width="2.5" marker-end="url(#arr)"/>
+  <text x="1050" y="432" fill="#6366f1" font-size="12" font-weight="bold">char_onehot[35:0]</text>
+
+  <path d="M 1030 410 L 1030 520 L 1100 520" stroke="#ef4444" stroke-width="2.5" marker-end="url(#arr)"/>
+  <text x="1050" y="512" fill="#ef4444" font-size="12" font-weight="bold">ERR</text>
+
+  <!-- Connections from 5 & 5b to 10 -->
+  <path d="M 670 340 L 710 340" stroke="#eab308" stroke-width="2" marker-end="url(#arr)"/>
+  <path d="M 680 240 L 680 320 L 710 320" stroke="#f59e0b" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Connections from 10 to 9 -->
+  <path d="M 870 340 L 910 340" stroke="#10b981" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Footer note -->
+  <text x="575" y="620" text-anchor="middle" fill="#64748b" font-size="12">Single-Clock Synchronous Architecture | Hardware Demo Wrapper Cascades 7490 Decade Counters for Board Clock Division</text>
+</svg>

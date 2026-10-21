@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 550" width="950" height="550" style="background:#0f172a; font-family:'Segoe UI', system-ui, -apple-system, sans-serif;">
+  <defs>
+    <linearGradient id="idleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="measGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="gapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="decGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f472b6"/>
+      <stop offset="100%" stop-color="#db2777"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#94a3b8"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrow-pink" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#f472b6"/>
+    </marker>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="475" y="42" text-anchor="middle" fill="#f8fafc" font-size="22" font-weight="bold">Digital Morse Decoder: 4-State Gray-Encoded Control FSM</text>
+  <text x="475" y="68" text-anchor="middle" fill="#94a3b8" font-size="13">MDIT221 Unit IV/V | Gray Sequence: 00 → 01 → 11 → 10 → 00 (Single-bit race-free transitions)</text>
+
+  <!-- State 0: IDLE (150, 180) -->
+  <g transform="translate(140, 150)">
+    <circle cx="60" cy="60" r="56" fill="url(#idleGrad)" stroke="#38bdf8" stroke-width="3" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.5))"/>
+    <text x="60" y="52" text-anchor="middle" fill="#0f172a" font-size="16" font-weight="bold">IDLE</text>
+    <text x="60" y="74" text-anchor="middle" fill="#0f172a" font-size="14" font-weight="600">Q₁Q₀ = 00</text>
+  </g>
+
+  <!-- State 1: MEASURE (700, 150) -->
+  <g transform="translate(680, 150)">
+    <circle cx="60" cy="60" r="56" fill="url(#measGrad)" stroke="#34d399" stroke-width="3" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.5))"/>
+    <text x="60" y="48" text-anchor="middle" fill="#0f172a" font-size="15" font-weight="bold">MEASURE</text>
+    <text x="60" y="68" text-anchor="middle" fill="#0f172a" font-size="14" font-weight="600">Q₁Q₀ = 01</text>
+    <text x="60" y="85" text-anchor="middle" fill="#064e3b" font-size="11">in_measure=1</text>
+  </g>
+
+  <!-- State 2: GAP (680, 380) -->
+  <g transform="translate(680, 360)">
+    <circle cx="60" cy="60" r="56" fill="url(#gapGrad)" stroke="#fbbf24" stroke-width="3" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.5))"/>
+    <text x="60" y="48" text-anchor="middle" fill="#0f172a" font-size="16" font-weight="bold">GAP</text>
+    <text x="60" y="68" text-anchor="middle" fill="#0f172a" font-size="14" font-weight="600">Q₁Q₀ = 11</text>
+    <text x="60" y="85" text-anchor="middle" fill="#78350f" font-size="11">in_gap=1</text>
+  </g>
+
+  <!-- State 3: DECODE (140, 360) -->
+  <g transform="translate(140, 360)">
+    <circle cx="60" cy="60" r="56" fill="url(#decGrad)" stroke="#f472b6" stroke-width="3" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.5))"/>
+    <text x="60" y="48" text-anchor="middle" fill="#0f172a" font-size="15" font-weight="bold">DECODE</text>
+    <text x="60" y="68" text-anchor="middle" fill="#0f172a" font-size="14" font-weight="600">Q₁Q₀ = 10</text>
+    <text x="60" y="85" text-anchor="middle" fill="#831843" font-size="11">decode_strobe=1</text>
+  </g>
+
+  <!-- Transition: IDLE -> MEASURE on PRESS -->
+  <path d="M 256 190 Q 470 120 680 190" fill="none" stroke="#34d399" stroke-width="2.5" marker-end="url(#arrow-green)"/>
+  <rect x="420" y="125" width="100" height="26" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="470" y="142" text-anchor="middle" fill="#34d399" font-size="12" font-weight="600">PRESS = 1</text>
+
+  <!-- Transition: MEASURE -> GAP on RELEASE -->
+  <path d="M 760 262 L 760 358" fill="none" stroke="#fbbf24" stroke-width="2.5" marker-end="url(#arrow-amber)"/>
+  <rect x="768" y="295" width="160" height="34" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="848" y="311" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="600">RELEASE = 1</text>
+  <text x="848" y="324" text-anchor="middle" fill="#94a3b8" font-size="10">shift_en = 1 (classify)</text>
+
+  <!-- Transition: GAP -> MEASURE on PRESS before letter_end -->
+  <path d="M 720 358 L 720 264" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrow-green)"/>
+  <rect x="585" y="298" width="125" height="26" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="647" y="315" text-anchor="middle" fill="#34d399" font-size="11">PRESS (next sym)</text>
+
+  <!-- Transition: GAP -> DECODE on LETTER_END -->
+  <path d="M 680 435 Q 470 480 254 435" fill="none" stroke="#f472b6" stroke-width="2.5" marker-end="url(#arrow-pink)"/>
+  <rect x="400" y="440" width="140" height="26" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="470" y="457" text-anchor="middle" fill="#f472b6" font-size="12" font-weight="600">LETTER_END = 1</text>
+
+  <!-- Transition: DECODE -> IDLE (unconditional) -->
+  <path d="M 180 360 L 180 265" fill="none" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <rect x="65" y="298" width="105" height="26" rx="4" fill="#1e293b" stroke="#334155"/>
+  <text x="117" y="315" text-anchor="middle" fill="#38bdf8" font-size="11">unconditional</text>
+
+  <!-- Keying & Excitation Equations Box -->
+  <g transform="translate(300, 205)">
+    <rect width="340" height="175" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+    <text x="170" y="26" text-anchor="middle" fill="#f8fafc" font-size="13" font-weight="bold">Synthesized Dataflow Excitation Equations</text>
+    <line x1="20" y1="36" x2="320" y2="36" stroke="#334155"/>
+    <text x="30" y="60" fill="#94a3b8" font-size="12" font-family="monospace">D₁ = Q₀·(Q₁·PRESS' + Q₁'·RELEASE)</text>
+    <text x="30" y="84" fill="#94a3b8" font-size="12" font-family="monospace">D₀ = Q₁'·(Q₀ + PRESS) + Q₁·Q₀·(PRESS + LEND')</text>
+    <text x="30" y="108" fill="#34d399" font-size="12" font-family="monospace">in_measure  = Q₁' · Q₀</text>
+    <text x="30" y="128" fill="#fbbf24" font-size="12" font-family="monospace">in_gap      = Q₁ · Q₀</text>
+    <text x="30" y="148" fill="#f472b6" font-size="12" font-family="monospace">decode_stb  = Q₁ · Q₀'  (clear_regs)</text>
+    <text x="30" y="166" fill="#38bdf8" font-size="12" font-family="monospace">shift_en    = Q₁' · Q₀ · RELEASE</text>
+  </g>
+</svg>
