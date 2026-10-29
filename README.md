@@ -1,14 +1,13 @@
-# Digital Morse Decoder (DLD Mini-Project - MDIT221)
-
-A complete, fully verified, and synthesizable **Digital Morse Decoder** designed in **VHDL-93** adhering strictly to the **MDIT221 Digital Logic Design** syllabus (Units IV & V: Behavioral, Dataflow, and Structural modeling styles).
+# Digital Morse Decoder 
+A complete, fully verified, and synthesizable **Digital Morse Decoder**.
 
 This repository contains both the **IEEE VHDL-93 hardware core** (verified 100% in GHDL and ModelSim across 8 test suites) and an interactive web visualization workbench.
 
 ---
 
-## 🏛️ Syllabus-Compliant Architecture (MDIT221)
+## 🏛️ Syllabus-Compliant Architecture ( )
 
-The hardware architecture uses **ONLY** primitives explicitly covered in MDIT221:
+The hardware architecture uses **ONLY** primitives explicitly covered in  :
 - **Sequential Primitives (Unit IV Behavioral)**: S-R latch (`srlatch`), edge-triggered D flip-flop (`dff`), J-K flip-flop (`jkff`), T flip-flop (`tff`), 7490 decade counter (`ic7490`).
 - **MSI Combinational ICs (Unit V Dataflow)**: 74138 (3-to-8 decoder), 7485 (4-bit magnitude comparator), 7483 (4-bit full adder), 74151 (8:1 mux), 74153 (dual 4:1 mux), 7404 (NOT), 7408 (AND), 7432 (OR).
 - **Subsystems & Integration (Unit V Structural)**:
@@ -75,18 +74,6 @@ All 8 test suites in [`tb/tb_morse.vhd`](file:///d:/DL/tb/tb_morse.vhd) pass wit
 6. **Test 6**: Counter wrap-around immunity (100-tick hold and 100-tick gap).
 7. **Test 7**: Power-up safety & display hold persistence.
 8. **Test 8**: FSM state transition sequence logging during SOS.
-
----
-
-## 📚 Technical Documentation
-
-Detailed engineering analyses are located in [`docs/`](file:///d:/DL/docs):
-- [`docs/coverage_map.md`](file:///d:/DL/docs/coverage_map.md): Matrix mapping all 27 entities to MDIT221 units, modeling styles, and 74xx ICs.
-- [`docs/syllabus_check.md`](file:///d:/DL/docs/syllabus_check.md): Compliance audit confirming every primitive is allowed and all forbidden parts are excluded.
-- [`docs/kmap.md`](file:///d:/DL/docs/kmap.md): Karnaugh maps and minimal Boolean derivations for B, Z, Q, 5, and don't-care analysis.
-- [`docs/fsm.md`](file:///d:/DL/docs/fsm.md): Formal state transition table, Gray excitation tables, K-maps, and control strobe equations.
-- [`docs/README.md`](file:///d:/DL/docs/README.md): Reproduction steps for GHDL, ModelSim, Intel Quartus Prime, and AMD Vivado.
-- [`NOTES.md`](file:///d:/DL/NOTES.md): Engineering log, race analysis resolutions, assumptions, and raw simulation logs.
 
 ---
 
