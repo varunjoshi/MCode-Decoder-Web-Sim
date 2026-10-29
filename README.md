@@ -5,7 +5,7 @@ This repository contains both the **IEEE VHDL-93 hardware core** (verified 100% 
 
 ---
 
-## 🏛️ Syllabus-Compliant Architecture ( )
+## 🏛️ Architecture 
 
 The hardware architecture uses **ONLY** primitives explicitly covered in  :
 - **Sequential Primitives (Unit IV Behavioral)**: S-R latch (`srlatch`), edge-triggered D flip-flop (`dff`), J-K flip-flop (`jkff`), T flip-flop (`tff`), 7490 decade counter (`ic7490`).
@@ -23,23 +23,10 @@ The hardware architecture uses **ONLY** primitives explicitly covered in  :
   - 36-Character Decoder Matrix from 6x 74138 decoders & 74xx gates (`morse_decoder_74138.vhd`)
   - Integrated Top System (`morse_top.vhd`) and FPGA Wrapper (`morse_demo_wrapper.vhd`)
 
-> [!IMPORTANT]
-> **Zero Forbidden Primitives**: No 7474, 7475, 74161, 74164, 74175, 74194, 74139, 74154, 555 timers, Verilog code, ROM/RAM lookup tables, microcontrollers/CPUs, behavioral FSMs, or case-statement character tables are used anywhere in the design.
+
 
 ---
 
-## 📊 Visual Artifacts & Slide-Ready Diagrams
-
-All figures are pre-rendered in high resolution in [`figures/`](file:///d:/DL/figures):
-
-| Diagram | Description | PNG Preview |
-| :--- | :--- | :---: |
-| **System Architecture** | Structural hierarchy, 74xx IC interconnection, and signal paths | [`figures/architecture_diagram.png`](file:///d:/DL/figures/architecture_diagram.png) |
-| **FSM State Diagram** | 4-state Gray-coded controller (`IDLE`, `MEASURE`, `GAP`, `DECODE`) | [`figures/fsm_state_diagram.png`](file:///d:/DL/figures/fsm_state_diagram.png) |
-| **Letter 'A' Timing** | Waveform showing dot (4T), gap (1T), dash (12T), and decode latch | [`figures/timing_letter_a.png`](file:///d:/DL/figures/timing_letter_a.png) |
-| **'SOS' Sequence Timing** | Full message sequence with 3T inter-letter gaps and space detection | [`figures/timing_sos.png`](file:///d:/DL/figures/timing_sos.png) |
-
----
 
 ## 🚀 Quick Start & Simulation
 
